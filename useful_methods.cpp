@@ -86,4 +86,161 @@ int lcs (char *a, int n, char *b, int m, char **s) {
     return t;
 }
 
+--------
+//ORDENAR
 
+struct student{
+	std::string name;
+	std::string lastname;
+};
+
+int mycomp(student a, student b){
+	if(b.lastname == a.lastname) return b.name >= a.name;
+	return b.lastname >= a.lastname;
+}
+
+
+int main(void){
+	int n;
+	std::string st1;
+	std::string st2;
+	std::vector<student> v;
+	std::cin>>n;
+	for(int i=0;i<n;i++){
+		std::cin>> st1>>st2;
+		v.push_back({st1, st2});
+	}
+	std::sort(v.begin(),v.end(),mycomp);
+	
+	for(std::vector<student>::iterator it=v.begin();it!=v.end();++it){
+		student aux = *it;
+		std::cout<<aux.name <<" "<<aux.lastname<<"\n";
+	}
+}
+
+--------
+//precision, getline
+#include <iostream>
+#include <string>
+#include <iomanip>
+
+int main(void){
+	std::string name;
+	int average=0,n,total=0;
+	while(std::getline(std::cin,name)){
+		std::cin>>n;
+		std::getline(std::cin,name);
+		total++;
+		average+=n;
+	}
+	double res = 1.0*average/(total-1);
+	std::cout<<std::fixed<<std::setprecision(1)<<res<<"\n";
+
+	return 0;
+}
+
+---
+//map
+#include <iostream>
+#include <iomanip>
+#include <map>
+
+struct pair{
+	int residents;
+	int consumption;
+};
+
+int main(void){
+	int n, cases=0;
+	while(true){
+		std::cin>>n;
+		if(n==0) break;
+		double ciudadanos=0;
+		double consumo=0;
+		int parser;
+		double average;
+		if(cases>0) std::cout<<"\n";
+		
+		std::map<int,int> m;
+		for(int i=0;i<n;i++){
+			int x, y;
+			std::cin>>x>>y;
+			ciudadanos+=x;
+			consumo+=y;
+			if(m.count(y/x)) m[y/x]+=x;
+			else m[y/x]=x;
+
+		}
+		average=consumo/ciudadanos;
+		parser = average*100;
+		average = parser/100.0;
+		
+		std::cout<<"Cidade# "<<cases+1<<":\n";
+		std::map<int,int>::iterator last=m.end();
+		--last;
+		for(std::map<int,int>::iterator it=m.begin();it!=last;++it){
+		
+			std::cout<<it->second<<"-"<<it->first<<" ";
+		}
+		std::cout<<last->second<<"-"<<last->first<<"\n";
+		
+		
+
+		std::cout<<"Consumo medio: "<<std::fixed<<std::setprecision(2)<<average<<"m3.\n";
+		
+		cases++;
+	}
+
+	return 0;
+}	
+
+-----
+//sort with vector
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+struct pair{
+	std::string palabra;
+	int posicion;
+};
+
+bool compare(pair i, pair j){
+	if(i.palabra.length() == j.palabra.length()) return i.posicion<j.posicion;
+	return i.palabra.length()>j.palabra.length();
+}
+
+
+
+int main(void){
+	int n;
+	std::cin>>n;
+	std::string aux;
+	std::string input, word, output;
+	std::getline(std::cin, input);
+	for(int i=0;i<n;i++){
+		word="";
+		output="";
+		std::getline(std::cin, input);
+		input+=" ";
+		std::vector<pair> strings;
+		for(int j=0;j<input.length();j++){
+			if(input[j]!= ' ') word+=input[j];
+			else{
+			word+=" ";
+			strings.push_back({word, j});
+			word="";
+			}
+		}
+		std::sort(strings.begin(), strings.end(), compare);
+		for(int i=0;i<strings.size();i++){
+			output+=strings.at(i).palabra;
+		}
+		output=output.substr(0, output.length()-1);
+		std::cout<<output<<"\n";
+	}
+
+	return 0;
+}
